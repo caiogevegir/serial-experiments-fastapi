@@ -1,0 +1,70 @@
+<html>
+  <head>
+    <title>Detail Game</title>
+  </head>
+
+  <script>
+    async function detailGame() {
+      const id = document.getElementById('game-id-input').value;
+      const url = `http://127.0.0.1:8000/games/detail?id=${id}`;
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if ( !data.error ) {
+        document.getElementById("search-alert").innerText = 'Game found!';
+  
+        document.getElementById("game-id").innerText = data.id;
+        document.getElementById("created-at").innerText = data.created_at;
+        document.getElementById("updated-at").innerText = data.updated_at;
+        document.getElementById("name").innerText = data.name;
+        document.getElementById("platform").innerText = data.platform;
+        document.getElementById("status").innerText = data.status;
+        document.getElementById("score").innerText = data.score;
+      } else {
+        document.getElementById("search-alert").innerText = 'Game not found!';
+
+        document.getElementById("game-id").innerText = '';
+        document.getElementById("created-at").innerText = '';
+        document.getElementById("updated-at").innerText = '';
+        document.getElementById("name").innerText = '';
+        document.getElementById("platform").innerText = '';
+        document.getElementById("status").innerText = '';
+        document.getElementById("score").innerText = '';
+      }
+
+    }
+  </script>
+
+  <body>
+    <h1>Detail Game</h1>
+
+    <input id="game-id-input" placeholder="Game ID" value=""/>
+    <button onclick="detailGame()">Search</button>
+    <p id="search-alert"></p>
+    <br/><br/>
+
+
+    <label><b>ID:</b></label>
+    <p id="game-id"></p>
+
+    <label><b>Created At:</b></label>
+    <p id="created-at"></p>
+
+    <label><b>Updated At:</b></label>
+    <p id="updated-at"></p>
+
+    <label><b>Name:</b></label>
+    <p id="name"></p>
+
+    <label><b>Platform:</b></label>
+    <p id="platform"></p>
+
+    <label><b>Status:</b></label>
+    <p id="status"></p>
+
+    <label><b>Score:</b></label>
+    <p id="score"></p>
+
+    <a href="index.html">Go Back</a>
+  </body>
+</html>
