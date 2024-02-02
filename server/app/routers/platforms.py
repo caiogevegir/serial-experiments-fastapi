@@ -50,7 +50,6 @@ def list_platforms() -> list[dict] | dict:
     for ( id, name, manufacturer, release_year ) in ret
   ]
 
-
 # POST -------------------------------------------------------------------------
 
 @router.post('/platforms/add')
