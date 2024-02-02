@@ -39,7 +39,7 @@ CREATE_PLATFORMS_TABLE_QUERY = '''
     id SMALLINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
     manufacturer VARCHAR(50) NOT NULL,
-    release_year SMALLINT CHECK ( release_year BETWEEN 1900 AND 2999 )
+    release_year SMALLINT CHECK ( release_year BETWEEN 1900 AND 2999 ) NOT NULL
   );
 '''
 
@@ -92,7 +92,7 @@ def init() -> None:
     conn.close()
     print(SUCCESS_CONNECTION_MSG)
   except DatabaseError as err:
-    print('Database Error: ', err)
+    print('Database Error: ', err.msg)
 
 # ------------------------------------------------------------------------------
 
@@ -124,6 +124,6 @@ def execute_query(type: QueryType, query: str) -> list | dict:
     cursor.close()
     conn.close()
   except DatabaseError as err:
-    ret[DB_ERROR_KEY] = err
+    ret[DB_ERROR_KEY] = err.msg
   
   return ret
