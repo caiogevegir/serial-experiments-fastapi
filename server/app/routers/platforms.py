@@ -6,6 +6,8 @@ from sql import platforms as sql
 
 router = APIRouter()
 
+ENDPOINT = 'platforms'
+
 # ------------------------------------------------------------------------------
 
 class Platform(BaseModel):
@@ -33,7 +35,7 @@ class Platform(BaseModel):
 
 # GET --------------------------------------------------------------------------
 
-@router.get('/platforms/list')
+@router.get(f'/{ENDPOINT}/list')
 def list_platforms() -> list[dict] | dict:
   ret = sql.list_platforms()
 
@@ -52,7 +54,7 @@ def list_platforms() -> list[dict] | dict:
 
 # POST -------------------------------------------------------------------------
 
-@router.post('/platforms/add')
+@router.post(f'/{ENDPOINT}/add')
 def add_platform(new_platform: Platform) -> dict:
   ret = sql.add_platform(
     new_platform.name,

@@ -5,27 +5,29 @@ from sql import games as sql
 
 router = APIRouter()
 
+ENDPOINT = 'games'
+
 # GET --------------------------------------------------------------------------
 
-@router.get('/games/list')
+@router.get(f'/{ENDPOINT}/list')
 def list_games():
   pass
 
 
 # POST -------------------------------------------------------------------------
 
-@router.post('/games/add')
+@router.post(f'/{ENDPOINT}/add')
 def add_game():
   pass
 
 # PUT --------------------------------------------------------------------------
 
-@router.put('/games/update')
+@router.put(f'/{ENDPOINT}/update')
 def update_game():
   pass
 
 # DELETE -----------------------------------------------------------------------
 
-@router.delete('/games/remove')
+@router.delete(f'/{ENDPOINT}/remove')
 def remove_game():
   pass
