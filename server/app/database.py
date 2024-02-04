@@ -1,6 +1,6 @@
 import os
 from enum import Enum
-from mysql.connector import MySQLConnection, Error as DatabaseError
+from mysql.connector import MySQLConnection, Error
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -10,7 +10,8 @@ class QueryType(Enum):
   WRITE = 1
 
 AUTH_PLUGIN = 'mysql_native_password'
-SUCCESS_CONNECTION_MSG = 'MySQL Database connection successful'
+SUCCESS_CONNECTION_MSG = 'Database connection successful'
+ERROR_MSG = 'Connection and/or query syntax error'
 DB_ERROR_KEY = 'db_error'
 
 HOST = os.getenv('MYSQL_HOST')
@@ -91,8 +92,8 @@ def init() -> None:
     cursor.close()
     conn.close()
     print(SUCCESS_CONNECTION_MSG)
-  except DatabaseError as err:
-    print('Database Error: ', err.msg)
+  except Error:
+    print(ERROR_MSG)
 
 # ------------------------------------------------------------------------------
 
@@ -106,12 +107,16 @@ def connect_to_database() -> MySQLConnection:
   )
 
 
-def execute_query(type: QueryType, query: str) -> list | dict:
-  ret = {}
+def execute_query(
+  type: QueryType, 
+  query: str, 
+  params: tuple | None = None
+) -> tuple(list | dict | None, str | None):
+  ret, err = None, None
   try:
     conn = connect_to_database()
     cursor = conn.cursor()
-    cursor.execute(query)
+    cursor.execute(query, params)
 
     match type:
       case QueryType.READ: # Receives the items
@@ -123,7 +128,7 @@ def execute_query(type: QueryType, query: str) -> list | dict:
 
     cursor.close()
     conn.close()
-  except DatabaseError as err:
-    ret[DB_ERROR_KEY] = err.msg
+  except Error:
+    err = ERROR_MSG
   
-  return ret
+  return ( ret, err )

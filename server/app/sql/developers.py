@@ -2,20 +2,23 @@ from database import execute_query, QueryType
 
 # READ -------------------------------------------------------------------------
 
-def list_developers() -> dict:
+def list_developers() -> tuple(dict | list | None, str | None):
   query = '''
-  SELECT *
-  FROM developers
+    SELECT *
+    FROM developers
   '''
   
   return execute_query(QueryType.READ, query)
 
 # WRITE ------------------------------------------------------------------------
 
-def add_developer(name: str, country_code: str) -> dict:
+def add_developer(
+  name: str, 
+  country_code: str
+) -> tuple(dict | None, str | None):
   query = f'''
-  INSERT INTO developers ( name, country_code )
-  VALUES ( '{name}', '{country_code}' )
+    INSERT INTO developers ( name, country_code )
+    VALUES ( ?, ? )
   '''
 
-  return execute_query(QueryType.WRITE, query)
+  return execute_query(QueryType.WRITE, query, (name, country_code))

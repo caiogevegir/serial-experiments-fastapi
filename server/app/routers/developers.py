@@ -1,3 +1,4 @@
+import re
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, field_validator
 
@@ -30,10 +31,10 @@ class Developer(BaseModel):
 
 @router.get(f'/{ENDPOINT}/list')
 def list_developers():
-  ret = sql.list_developers()
+  ret, err = sql.list_developers()
 
-  if isinstance(ret, dict) and DB_ERROR_KEY in ret.keys():
-    raise HTTPException(status_code=500, detail=ret)
+  if err != None:
+    raise HTTPException(status_code=500, detail=err)
 
   return [
     {
@@ -48,13 +49,13 @@ def list_developers():
 
 @router.post(f'/{ENDPOINT}/add')
 def add_developer(new_developer: Developer):
-  ret = sql.add_developer(
+  ret, err = sql.add_developer(
     new_developer.name,
     new_developer.country_code,
   )
 
-  if isinstance(ret, dict) and DB_ERROR_KEY in ret.keys():
-    raise HTTPException(status_code=500, detail=ret)
+  if err != None:
+    raise HTTPException(status_code=500, detail=err)
 
   return {
     'name': new_developer.name,

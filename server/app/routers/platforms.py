@@ -37,10 +37,10 @@ class Platform(BaseModel):
 
 @router.get(f'/{ENDPOINT}/list')
 def list_platforms() -> list[dict] | dict:
-  ret = sql.list_platforms()
+  ret, err = sql.list_platforms()
 
-  if isinstance(ret, dict) and DB_ERROR_KEY in ret.keys():
-    raise HTTPException(status_code=500, detail=ret)
+  if err != None:
+    raise HTTPException(status_code=500, detail=err)
 
   return [
     {
@@ -56,14 +56,14 @@ def list_platforms() -> list[dict] | dict:
 
 @router.post(f'/{ENDPOINT}/add')
 def add_platform(new_platform: Platform) -> dict:
-  ret = sql.add_platform(
+  ret, err = sql.add_platform(
     new_platform.name,
     new_platform.manufacturer,
     new_platform.release_year
   )
 
-  if isinstance(ret, dict) and DB_ERROR_KEY in ret.keys():
-    raise HTTPException(status_code=500, detail=ret)
+  if err != None:
+    raise HTTPException(status_code=500, detail=err)
 
   return {
     'name': new_platform.name,
