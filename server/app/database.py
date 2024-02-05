@@ -11,7 +11,7 @@ class QueryType(Enum):
 
 AUTH_PLUGIN = 'mysql_native_password'
 SUCCESS_CONNECTION_MSG = 'Database connection successful'
-ERROR_MSG = 'Connection and/or query syntax error'
+ERROR_MSG = 'Database connection and/or query syntax error'
 DB_ERROR_KEY = 'db_error'
 
 HOST = os.getenv('MYSQL_HOST')
