@@ -126,7 +126,10 @@ def assign_game_to_developers(game_id: str, developers: list[int]) -> tuple:
 
 # ------------------------------------------------------------------------------
 
-def unassign_game_from_developer(game_id: str, developer_id: list[int]) -> tuple:
+def unassign_game_from_developer(
+  game_id: str,
+  developer_id: int
+) -> tuple:
   query = '''
     DELETE
     FROM games_by_developers

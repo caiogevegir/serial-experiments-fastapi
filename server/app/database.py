@@ -9,6 +9,8 @@ class QueryType(Enum):
   READ = 0
   WRITE = 1
 
+# ------------------------------------------------------------------------------
+
 AUTH_PLUGIN = 'mysql_native_password'
 SUCCESS_CONNECTION_MSG = 'Database connection successful'
 ERROR_MSG = 'Database connection and/or query syntax error'
