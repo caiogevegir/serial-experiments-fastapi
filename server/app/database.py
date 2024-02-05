@@ -49,7 +49,7 @@ CREATE_GAMES_TABLE = '''
     id VARCHAR(36) PRIMARY KEY,
     name VARCHAR(60) NOT NULL,
     platform_id SMALLINT, FOREIGN KEY (platform_id) REFERENCES platforms(id) ON DELETE SET NULL,
-    gameplay_status ENUM('BACKLOG', 'PLAYING', 'HIATUS', 'FINISHED', 'DROPPED') NOT NULL,
+    gameplay_status ENUM('BACKLOG', 'PLAYING', 'HIATUS', 'FINISHED', 'CONTINUOUS', 'DROPPED') NOT NULL,
     is_owned BOOL NOT NULL,
     commentary VARCHAR(255),
     backlog_date DATE NOT NULL,
@@ -111,7 +111,7 @@ def execute_query(
   type: QueryType, 
   query: str, 
   params: tuple | None = None
-) -> tuple(list | dict | None, str | None):
+) -> tuple:
   ret, err = None, None
   try:
     conn = connect_to_database()

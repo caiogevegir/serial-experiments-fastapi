@@ -2,7 +2,7 @@ from database import execute_query, QueryType
 
 # READ -------------------------------------------------------------------------
 
-def list_developers() -> tuple(dict | list | None, str | None):
+def list_developers() -> tuple:
   query = '''
     SELECT *
     FROM developers
@@ -12,13 +12,10 @@ def list_developers() -> tuple(dict | list | None, str | None):
 
 # WRITE ------------------------------------------------------------------------
 
-def add_developer(
-  name: str, 
-  country_code: str
-) -> tuple(dict | None, str | None):
+def add_developer(name: str, country_code: str) -> tuple:
   query = f'''
     INSERT INTO developers ( name, country_code )
-    VALUES ( ?, ? )
+    VALUES ( %s, %s )
   '''
 
   return execute_query(QueryType.WRITE, query, (name, country_code))
