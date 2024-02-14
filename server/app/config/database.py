@@ -23,11 +23,3 @@ SessionLocal = sessionmaker(
 
 
 Base = declarative_base()
-
-
-def log_on_db():
-  db = SessionLocal()
-  try:
-    yield db
-  finally:
-    db.close()
