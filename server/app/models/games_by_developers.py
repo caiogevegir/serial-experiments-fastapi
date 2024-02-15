@@ -1,8 +1,8 @@
-from enum import Enum
-from sqlalchemy import Column, Boolean, Integer, String, ForeignKey, Date
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, Integer, ForeignKey
 
 from config.database import Base
+
+# ------------------------------------------------------------------------------
 
 
 class GamesByDevelopersModel(Base):

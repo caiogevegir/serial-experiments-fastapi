@@ -1,9 +1,9 @@
-from enum import Enum
-from sqlalchemy import Column, Boolean, Integer, String, ForeignKeyConstraint, Date
+from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
 
 from config.database import Base
 
+# ------------------------------------------------------------------------------
 
 class DevelopersModel(Base):
   __tablename__ = 'developers'

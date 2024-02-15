@@ -1,26 +1,10 @@
-from enum import Enum
-from sqlalchemy import Column, Boolean, Integer, String, ForeignKey, Date
+from sqlalchemy import Column, Integer, String, ForeignKey, Date
 from sqlalchemy.orm import relationship
 
 from config.database import Base
+from utils.enums import GameStatus, OwnershipStatus
 
-
-class GameStatus(Enum):
-  BACKLOG = 'BACKLOG'
-  PLAYING = 'PLAYING'
-  CONTINUOUS = 'CONTINUOUS'
-  HIATUS = 'HIATUS'
-  FINISHED = 'FINISHED'
-  DROPPED = 'DROPPED'
-
-
-class OwnershipStatus(Enum):
-  PHYSICAL = 'PHYSICAL'
-  DIGITAL = 'DIGITAL'
-  SERVICE = 'SERVICE'
-  BORROWED = 'BORROWED'
-  PIRATED = 'PIRATED'
-
+# ------------------------------------------------------------------------------
 
 class GamesModel(Base):
   __tablename__ = 'games'
