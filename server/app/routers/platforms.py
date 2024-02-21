@@ -1,78 +1,24 @@
-from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel, field_validator
+from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
 
-from database import DB_ERROR_KEY
-from sql import platforms as sql
+from config.database import get_db
+from services.platforms import PlatformsService
+from schemas.platforms import PlatformsSchema, PlatformsCreateSchema
 
-router = APIRouter()
+router = APIRouter(prefix='/platforms')
 
-ENDPOINT = 'platforms'
-
-#==============================================================================#
-# MODELS                                                                       #
-#==============================================================================#
-
-class Platform(BaseModel):
-  name: str
-  manufacturer: str
-  release_year: int
-
-  @field_validator('name')
-  def check_name(cls, value: str) -> str:
-    if len(value) > 50:
-      raise ValueError('length cannot be longer than 50.')
-    return value
+# GET --------------------------------------------------------------------------
   
-  @field_validator('manufacturer')
-  def check_manufacturer(cls, value: str) -> str:
-    if len(value) > 50:
-      raise ValueError('length cannot be longer than 50.')
-    return value
+@router.get('/list', response_model=list[PlatformsSchema])
+async def list_all_platforms(db: Session = Depends(get_db)):
+  return PlatformsService(db).list_all_platforms().handle_result()
 
-  @field_validator('release_year')
-  def check_release_year(cls, value: int) -> int:
-    if value < 1900 or value > 2999:
-      raise ValueError('must be between 1900 and 2999.')
-    return value
+# POST -------------------------------------------------------------------------
 
-#==============================================================================#
-# GET                                                                          #
-#==============================================================================#
+@router.post('/add', response_model=PlatformsSchema)
+async def add_platform(
+  new_platform: PlatformsCreateSchema, 
+  db: Session = Depends(get_db)
+):
+  return PlatformsService(db).add_platform(new_platform).handle_result()
 
-@router.get(f'/{ENDPOINT}/list')
-def list_platforms() -> list[dict] | dict:
-  ret, err = sql.list_platforms()
-
-  if err != None:
-    raise HTTPException(status_code=500, detail=err)
-
-  return [
-    {
-      'id': id,
-      'name': name,
-      'manufacturer': manufacturer,
-      'release_year': release_year
-    }
-    for ( id, name, manufacturer, release_year ) in ret
-  ]
-
-#==============================================================================#
-# POST                                                                         #
-#==============================================================================#
-
-@router.post(f'/{ENDPOINT}/add')
-def add_platform(new_platform: Platform) -> dict:
-  ret, err = sql.add_platform(
-    new_platform.name,
-    new_platform.manufacturer,
-    new_platform.release_year
-  )
-
-  if err != None:
-    raise HTTPException(status_code=500, detail=err)
-
-  return {
-    'name': new_platform.name,
-    'manufacturer': new_platform.manufacturer,
-    'release_year': new_platform.release_year
-  }

@@ -1,18 +1,16 @@
 import uvicorn
+import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from contextlib import asynccontextmanager
+from dotenv import load_dotenv
 
-import database
 from routers import games, platforms, developers
+from errors.main import AppExceptionCase, app_exception_handler
+from config.database import create_tables
 
 # ------------------------------------------------------------------------------
 
-MAIN_APP = 'main:app'
-HOST = '127.0.0.1'
-PORT = 8000
-LOG_LEVEL = 'info'
-RELOAD = True
+load_dotenv()
 
 ROUTERS = [ 
   games.router,
@@ -20,14 +18,13 @@ ROUTERS = [
   developers.router
 ]
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-  # Setup
-  database.init()
-  yield
-  # Teardown
+create_tables()
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI()
+
+@app.exception_handler(AppExceptionCase)
+async def custom_app_exception_handler(request, e):
+  return await app_exception_handler(request, e)
 
 # Wildcard is only for study purposes, since the server is running locally
 app.add_middleware(
@@ -45,9 +42,9 @@ for r in ROUTERS:
 
 if __name__ == '__main__':
   uvicorn.run(
-    app=MAIN_APP, 
-    host=HOST, 
-    port=PORT, 
-    log_level=LOG_LEVEL, 
-    reload=RELOAD
+    app=os.getenv('SERVER_APP'), 
+    host=os.getenv('SERVER_HOST'), 
+    port=int(os.getenv('SERVER_PORT')), 
+    log_level=os.getenv('SERVER_LOGLEVEL'), 
+    reload=True
   )

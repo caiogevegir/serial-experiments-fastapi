@@ -45,10 +45,9 @@ class ServiceResult:
   def __exit__(self, *kwargs):
     pass
 
-
-def handle_result(result: ServiceResult):
-  if not result.success:
-    with result as exception:
-      raise exception
-  with result as result:
-    return result
+  def handle_result(self):
+    if not self.success:
+      with self as exception:
+        raise exception
+    with self as result:
+      return result

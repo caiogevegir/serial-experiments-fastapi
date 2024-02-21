@@ -18,8 +18,12 @@ class GamesCreateSchema(GamesBaseSchema):
   developers_id: list[int]
 
 
-class GamesUpdateSchema(GamesCreateSchema):
-  pass
+class GamesUpdateSchema(BaseModel):
+  status: GameStatus | None
+  ownership: OwnershipStatus | None
+  platform_id: int | None
+  finish_date: str | None
+  score: int | None
 
 
 class GamesSchema(GamesBaseSchema):

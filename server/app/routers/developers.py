@@ -1,69 +1,23 @@
-import re
-from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel, field_validator
+from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
 
-from database import DB_ERROR_KEY
-from sql import developers as sql
+from config.database import get_db
+from services.developers import DevelopersService
+from schemas.developers import DevelopersSchema, DevelopersCreateSchema
 
-router = APIRouter()
+router = APIRouter(prefix='/developers')
 
-ENDPOINT = 'developers'
+# GET --------------------------------------------------------------------------
 
-#==============================================================================#
-# MODELS                                                                       #
-#==============================================================================#
+@router.get('/list', response_model=list[DevelopersSchema])
+async def list_all_developers(db: Session = Depends(get_db)):
+  return DevelopersService(db).list_all_developers().handle_result()
 
-class Developer(BaseModel):
-  name: str
-  country_code: str
+# POST -------------------------------------------------------------------------
 
-  @field_validator('name')
-  def check_name(cls, value: str) -> str:
-    if len(value) > 50:
-      raise ValueError('length cannot be longer than 50.')
-    return value
-  
-  @field_validator('country_code')
-  def check_country_code(cls, value: str) -> str:
-    if len(value) > 2:
-      raise ValueError('length cannot be longer than 2.')
-    return value
-
-#==============================================================================#
-# GET                                                                          #
-#==============================================================================#
-
-@router.get(f'/{ENDPOINT}/list')
-def list_developers():
-  ret, err = sql.list_developers()
-
-  if err != None:
-    raise HTTPException(status_code=500, detail=err)
-
-  return [
-    {
-      'id': id,
-      'name': name,
-      'country_code': country_code
-    }
-    for ( id, name, country_code ) in ret
-  ]
-
-#==============================================================================#
-# POST                                                                         #
-#==============================================================================#
-
-@router.post(f'/{ENDPOINT}/add')
-def add_developer(new_developer: Developer):
-  ret, err = sql.add_developer(
-    new_developer.name,
-    new_developer.country_code,
-  )
-
-  if err != None:
-    raise HTTPException(status_code=500, detail=err)
-
-  return {
-    'name': new_developer.name,
-    'manufacturer': new_developer.country_code,
-  }
+@router.post('/add', response_model=DevelopersSchema)
+async def add_developer(
+  new_developer: DevelopersCreateSchema,
+  db: Session = Depends(get_db)
+):
+  return DevelopersService(db).add_developer(new_developer).handle_result()
