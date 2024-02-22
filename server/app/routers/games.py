@@ -62,4 +62,3 @@ async def update_game(
 @router.delete('/remove{game_id}', response_model=int)
 async def remove_game(game_id: int, db: Session = Depends(get_db)):
   return GamesService(db).remove_game(game_id).handle_result()
-  

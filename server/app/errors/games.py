@@ -4,32 +4,27 @@ from main import AppExceptionCase
 
 class GamesException:
 
-  class FailedToListGames(AppExceptionCase):
+  class UnableToListGames(AppExceptionCase):
     def __init__(self, context: dict = None):
       status_code = 500
       AppExceptionCase.__init__(self, status_code, context)
   
-  class FailedToGetGame(AppExceptionCase):
+  class UnableToCreateGame(AppExceptionCase):
     def __init__(self, context: dict = None):
       status_code = 500
       AppExceptionCase.__init__(self, status_code, context)
   
-  class MultipleGamesWithSameID(AppExceptionCase):
+  class UnableToUpdateGame(AppExceptionCase):
     def __init__(self, context: dict = None):
       status_code = 500
       AppExceptionCase.__init__(self, status_code, context)
   
-  class FailedToCreateGame(AppExceptionCase):
+  class GameIDNotFound(AppExceptionCase):
     def __init__(self, context: dict = None):
-      status_code = 500
-      AppExceptionCase.__init__(self, status_code, context)
-  
-  class FailedToUpdateGame(AppExceptionCase):
-    def __init__(self, context: dict = None):
-      status_code = 500
+      status_code = 400
       AppExceptionCase.__init__(self, status_code, context)
 
-  class FailedToRemoveGame(AppExceptionCase):
+  class UnableToRemoveGame(AppExceptionCase):
     def __init__(self, context: dict = None):
       status_code = 500
       AppExceptionCase.__init__(self, status_code, context)

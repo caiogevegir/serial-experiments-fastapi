@@ -10,7 +10,7 @@ class DevelopersService(AppService):
   def list_all_developers(self) -> ServiceResult:
     developers = DevelopersCRUD(self.db).list_all_developers()
     if developers == None:
-      return ServiceResult(DevelopersException.FailedToListDevelopers())
+      return ServiceResult(DevelopersException.UnableToListDevelopers())
     return ServiceResult(developers)
     
   def add_developer(
@@ -19,7 +19,7 @@ class DevelopersService(AppService):
   ) -> ServiceResult:
     new_developer = DevelopersCRUD(self.db).add_developer(developer)
     if new_developer == None:
-      return ServiceResult(DevelopersException.FailedToAddDevelopers())
+      return ServiceResult(DevelopersException.UnableToAddDevelopers())
     return ServiceResult(new_developer)
     
 

@@ -10,13 +10,13 @@ class PlatformsService(AppService):
   def list_all_platforms(self) -> ServiceResult:
     platforms = PlatformsCRUD(self.db).list_all_platforms()
     if platforms == None:
-      return ServiceResult(PlatformsException.FailedToListPlatforms())
+      return ServiceResult(PlatformsException.UnableToListPlatforms())
     return ServiceResult(platforms)
   
   def add_platform(self, platform: PlatformsCreateSchema) -> ServiceResult:
     new_platform = PlatformsCRUD(self.db).add_platform(platform)
     if new_platform == None:
-      return ServiceResult(PlatformsException.FailedToAddPlatform())
+      return ServiceResult(PlatformsException.UnableToAddPlatform())
     return ServiceResult(new_platform)
     
 
