@@ -1,4 +1,4 @@
-from main import AppService, AppCRUD, ServiceResult
+from .main import AppService, AppCRUD, ServiceResult
 from models.platforms import PlatformsModel
 from schemas.platforms import PlatformsCreateSchema
 from errors.platforms import PlatformsException
@@ -7,7 +7,7 @@ from errors.platforms import PlatformsException
 
 class PlatformsService(AppService):
 
-  def list_all_platforms(self) -> ServiceResult:
+  def list_platforms(self) -> ServiceResult:
     platforms = PlatformsCRUD(self.db).list_all_platforms()
     if platforms == None:
       return ServiceResult(PlatformsException.UnableToListPlatforms())
@@ -24,7 +24,7 @@ class PlatformsService(AppService):
 
 class PlatformsCRUD(AppCRUD):
 
-  def list_all_platforms(self) -> list[PlatformsModel] | None:
+  def list_platforms(self) -> list[PlatformsModel] | None:
     try:
       return self.db.query(PlatformsModel).all()
     except:

@@ -1,4 +1,4 @@
-from main import AppService, AppCRUD, ServiceResult
+from .main import AppService, AppCRUD, ServiceResult
 from models.developers import DevelopersModel
 from schemas.developers import DevelopersCreateSchema
 from errors.developers import DevelopersException
@@ -7,7 +7,7 @@ from errors.developers import DevelopersException
 
 class DevelopersService(AppService):
 
-  def list_all_developers(self) -> ServiceResult:
+  def list_developers(self) -> ServiceResult:
     developers = DevelopersCRUD(self.db).list_all_developers()
     if developers == None:
       return ServiceResult(DevelopersException.UnableToListDevelopers())
@@ -27,7 +27,7 @@ class DevelopersService(AppService):
 
 class DevelopersCRUD(AppCRUD):
 
-  def list_all_developers(self) -> list[DevelopersModel] | None:
+  def list_developers(self) -> list[DevelopersModel] | None:
     try:
       return self.db.query(DevelopersModel).all()
     except:

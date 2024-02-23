@@ -34,7 +34,7 @@ class PlatformsModel(Base):
   )
 
   release_year = Column(
-    'manufacturer',
+    'release_year',
     Integer,
     nullable=False
   )

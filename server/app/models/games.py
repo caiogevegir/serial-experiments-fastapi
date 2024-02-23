@@ -1,8 +1,9 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Date
+from sqlalchemy import Column, Integer, String, ForeignKey, Date, Enum
 from sqlalchemy.orm import relationship
 
 from config.database import Base
 from utils.enums import GameStatus, OwnershipStatus
+from .games_by_developers import games_by_developers
 
 # ------------------------------------------------------------------------------
 
@@ -30,25 +31,15 @@ class GamesModel(Base):
     nullable=False
   )
 
-  platform = relationship(
-    'PlatformsModel',
-    back_populates='games'
-  )
-
-  developers = relationship(
-    secondary='GamesByDevelopersModel',
-    back_populates='games'
-  )
-
   status = Column(
     'status',
-    GameStatus,
+    Enum(GameStatus),
     nullable=False
   )
 
   ownership = Column(
     'ownership',
-    OwnershipStatus,
+    Enum(OwnershipStatus),
     nullable=False
   )
 
@@ -66,4 +57,15 @@ class GamesModel(Base):
   score = Column(
     'score',
     Integer
+  )
+
+  platform = relationship(
+    'PlatformsModel',
+    back_populates='games'
+  )
+
+  developers = relationship(
+    'DevelopersModel',
+    secondary=games_by_developers,
+    back_populates='games'
   )

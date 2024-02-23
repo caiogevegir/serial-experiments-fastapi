@@ -9,13 +9,13 @@ router = APIRouter(prefix='/developers')
 
 # GET --------------------------------------------------------------------------
 
-@router.get('/list', response_model=list[DevelopersSchema])
+@router.get('', response_model=list[DevelopersSchema])
 async def list_all_developers(db: Session = Depends(get_db)):
   return DevelopersService(db).list_all_developers().handle_result()
 
 # POST -------------------------------------------------------------------------
 
-@router.post('/add', response_model=DevelopersSchema)
+@router.post('', response_model=DevelopersSchema)
 async def add_developer(
   new_developer: DevelopersCreateSchema,
   db: Session = Depends(get_db)

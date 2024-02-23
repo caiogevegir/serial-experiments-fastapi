@@ -1,4 +1,4 @@
-from main import AppService, AppCRUD, ServiceResult
+from .main import AppService, AppCRUD, ServiceResult
 from models.games import GamesModel
 from schemas.games import GamesCreateSchema, GamesUpdateSchema
 from errors.games import GamesException

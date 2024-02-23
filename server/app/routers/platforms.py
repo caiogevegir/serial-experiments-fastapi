@@ -9,13 +9,13 @@ router = APIRouter(prefix='/platforms')
 
 # GET --------------------------------------------------------------------------
   
-@router.get('/list', response_model=list[PlatformsSchema])
+@router.get('', response_model=list[PlatformsSchema])
 async def list_all_platforms(db: Session = Depends(get_db)):
   return PlatformsService(db).list_all_platforms().handle_result()
 
 # POST -------------------------------------------------------------------------
 
-@router.post('/add', response_model=PlatformsSchema)
+@router.post('', response_model=PlatformsSchema)
 async def add_platform(
   new_platform: PlatformsCreateSchema, 
   db: Session = Depends(get_db)

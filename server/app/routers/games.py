@@ -9,7 +9,7 @@ router = APIRouter(prefix='/games')
 
 # GET --------------------------------------------------------------------------
 
-@router.get('/list', response_model=list[GamesSchema])
+@router.get('', response_model=list[GamesSchema])
 async def list_games(
   id: int = None,
   status: str = None,
@@ -31,13 +31,13 @@ async def list_games(
 
 # POST -------------------------------------------------------------------------
 
-@router.post('/add', response_model=GamesSchema)
+@router.post('', response_model=GamesSchema)
 async def add_game(new_game: GamesCreateSchema, db: Session = Depends(get_db)):
   return GamesService(db).add_game(new_game).handle_result()
 
 # PUT --------------------------------------------------------------------------
 
-@router.put('/update/{game_id}', response_model=GamesSchema)
+@router.put('{game_id}', response_model=GamesSchema)
 async def update_game(
   game_id: int,
   updated_game: GamesUpdateSchema,
@@ -59,6 +59,6 @@ async def update_game(
 
 # DELETE -----------------------------------------------------------------------
 
-@router.delete('/remove{game_id}', response_model=int)
+@router.delete('{game_id}', response_model=int)
 async def remove_game(game_id: int, db: Session = Depends(get_db)):
   return GamesService(db).remove_game(game_id).handle_result()

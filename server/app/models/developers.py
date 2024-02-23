@@ -2,6 +2,7 @@ from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
 
 from config.database import Base
+from .games_by_developers import games_by_developers
 
 # ------------------------------------------------------------------------------
 
@@ -29,6 +30,7 @@ class DevelopersModel(Base):
   )
 
   games = relationship(
-    secondary='GamesByDevelopersModel',
+    'GamesModel',
+    secondary=games_by_developers,
     back_populates='developers'
   )

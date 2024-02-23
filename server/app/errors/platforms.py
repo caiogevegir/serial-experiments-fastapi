@@ -1,4 +1,4 @@
-from main import AppExceptionCase
+from .main import AppExceptionCase
 
 class PlatformsException:
 
