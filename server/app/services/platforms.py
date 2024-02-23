@@ -8,7 +8,7 @@ from errors.platforms import PlatformsException
 class PlatformsService(AppService):
 
   def list_platforms(self) -> ServiceResult:
-    platforms = PlatformsCRUD(self.db).list_all_platforms()
+    platforms = PlatformsCRUD(self.db).list_platforms()
     if platforms == None:
       return ServiceResult(PlatformsException.UnableToListPlatforms())
     return ServiceResult(platforms)

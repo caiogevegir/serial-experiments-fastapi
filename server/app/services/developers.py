@@ -8,7 +8,7 @@ from errors.developers import DevelopersException
 class DevelopersService(AppService):
 
   def list_developers(self) -> ServiceResult:
-    developers = DevelopersCRUD(self.db).list_all_developers()
+    developers = DevelopersCRUD(self.db).list_developers()
     if developers == None:
       return ServiceResult(DevelopersException.UnableToListDevelopers())
     return ServiceResult(developers)
