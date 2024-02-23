@@ -11,7 +11,7 @@ router = APIRouter(prefix='/developers')
 
 @router.get('', response_model=list[DevelopersSchema])
 async def list_all_developers(db: Session = Depends(get_db)):
-  return DevelopersService(db).list_all_developers().handle_result()
+  return DevelopersService(db).list_developers().handle_result()
 
 # POST -------------------------------------------------------------------------
 

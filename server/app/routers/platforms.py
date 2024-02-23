@@ -11,7 +11,7 @@ router = APIRouter(prefix='/platforms')
   
 @router.get('', response_model=list[PlatformsSchema])
 async def list_all_platforms(db: Session = Depends(get_db)):
-  return PlatformsService(db).list_all_platforms().handle_result()
+  return PlatformsService(db).list_platforms().handle_result()
 
 # POST -------------------------------------------------------------------------
 
