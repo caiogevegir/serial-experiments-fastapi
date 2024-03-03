@@ -27,9 +27,3 @@ class PlatformsModel(Base):
     String(20),
     nullable=False
   )
-
-  release_year = Column(
-    'release_year',
-    Integer,
-    nullable=False
-  )
