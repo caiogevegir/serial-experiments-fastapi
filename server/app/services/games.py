@@ -100,5 +100,5 @@ class GamesCRUD(AppCRUD):
       )
       self.db.commit()
       return rows
-    except Exception as e:
+    except:
       return None
