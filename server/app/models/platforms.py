@@ -22,11 +22,6 @@ class PlatformsModel(Base):
     nullable=False
   )
 
-  games = relationship(
-    'GamesModel',
-    back_populates='platform'
-  )
-
   manufacturer = Column(
     'manufacturer',
     String(20),

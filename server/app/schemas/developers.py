@@ -12,8 +12,7 @@ class DevelopersCreateSchema(DevelopersBaseSchema):
 
 
 class DevelopersSchema(DevelopersBaseSchema):
-  id: str
-  games: list[str] = []
+  id: int
 
   class Config:
     orm_mode = True

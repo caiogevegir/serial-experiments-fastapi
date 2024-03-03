@@ -1,8 +1,10 @@
 from .main import AppService, AppCRUD, ServiceResult
 from models.games import GamesModel
-from schemas.games import GamesCreateSchema, GamesUpdateSchema
+from models.developers import DevelopersModel
+from models.games_by_developers import games_by_developers
+from schemas.games import GamesCreateSchema, GamesUpdateSchema, \
+  GamesAssignToDeveloperSchema
 from errors.games import GamesException
-from utils.enums import GameStatus, OwnershipStatus
 
 # ------------------------------------------------------------------------------
 
@@ -14,30 +16,39 @@ class GamesService(AppService):
       return ServiceResult(GamesException.UnableToListGames())
     return ServiceResult(games)
 
-  def list_games_by_developers(self, developer_id: int) -> ServiceResult:
-    pass
-
   def add_game(self, game: GamesCreateSchema) -> ServiceResult:
     new_game = GamesCRUD(self.db).add_game(game)
     if new_game == None:
       return ServiceResult(GamesException.UnableToCreateGame())
     return ServiceResult(new_game)
   
-  def update_game(self, game_id: int, params: dict) -> ServiceResult:
-    rows = GamesCRUD(self.db).update_game(game_id, params)
+  def assign_developers(
+    self,
+    payload: GamesAssignToDeveloperSchema
+  ) -> ServiceResult:
+    ret = GamesCRUD(self.db).assign_developers(
+      payload.game_id, 
+      payload.developers_id
+    )
+    if ret == None:
+      return ServiceResult(GamesException.UnableToAssignDevelopersToGame())
+    return ServiceResult(payload)
+  
+  def update_game(self, updated_game: GamesUpdateSchema) -> ServiceResult:
+    rows = GamesCRUD(self.db).update_game(updated_game)
     if rows == None:
       return ServiceResult(GamesException.UnableToUpdateGame())
     if rows == 0:
       return ServiceResult(GamesException.GameIDNotFound())
-    return ServiceResult(rows)
+    return ServiceResult(updated_game)
 
-  def remove_game(self, game_id: int) -> ServiceResult:
-    rows = GamesCRUD(self.db).remove_game(game_id)
+  def remove_game(self, id: int) -> ServiceResult:
+    rows = GamesCRUD(self.db).remove_game(id)
     if rows == None:
       return ServiceResult(GamesException.UnableToRemoveGame())
     if rows == 0:
       return ServiceResult(GamesException.GameIDNotFound())
-    return ServiceResult(rows)
+    return ServiceResult({ 'id': id })
 
 # ------------------------------------------------------------------------------
 
@@ -59,18 +70,35 @@ class GamesCRUD(AppCRUD):
     except:
       return None
   
-  def update_game(self, game_id: int, params: dict) -> int | None:
+  def assign_developers(self, game_id: int, developers_id: list[int]):
     try:
-      rows = self.db.query(GamesModel).filter_by(id=game_id).update(params)
+      game = self.db.query(GamesModel).get(game_id)
+      # TODO: Is there a more efficient way to do this?
+      for developer_id in developers_id:
+        developer = self.db.query(DevelopersModel).get(developer_id)
+        game.developers.append(developer)
+      self.db.commit()
+      return True
+    except:
+      return None
+  
+  def update_game(self, updated_game: GamesUpdateSchema) -> int | None:
+    try:
+      rows = self.db.query(GamesModel).filter_by(id=updated_game.id).update({
+        'status': updated_game.status,
+        'score': updated_game.score
+      })
       self.db.commit()
       return rows
     except:
       return None
   
-  def remove_game(self, game_id: int) -> int | None:
+  def remove_game(self, id: int) -> int | None:
     try:
-      rows = self.db.query(GamesModel).delete(GamesModel.id == game_id)
+      rows = self.db.query(GamesModel).filter(GamesModel.id == id).delete(
+        synchronize_session=False
+      )
       self.db.commit()
       return rows
-    except:
+    except Exception as e:
       return None

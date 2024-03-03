@@ -13,8 +13,7 @@ class PlatformsCreateSchema(PlatformsBaseSchema):
 
 
 class PlatformsSchema(PlatformsBaseSchema):
-  id: str
-  games: list[str] = []
+  id: int
 
   class Config:
     orm_mode = True

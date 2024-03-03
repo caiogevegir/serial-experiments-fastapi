@@ -14,6 +14,11 @@ class GamesException:
       status_code = 500
       AppExceptionCase.__init__(self, status_code, context)
   
+  class UnableToAssignDevelopersToGame(AppExceptionCase):
+    def __init__(self, context: dict = None):
+      status_code = 500
+      AppExceptionCase.__init__(self, status_code, context)
+  
   class UnableToUpdateGame(AppExceptionCase):
     def __init__(self, context: dict = None):
       status_code = 500

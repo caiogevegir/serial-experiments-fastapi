@@ -3,7 +3,8 @@ from sqlalchemy.orm import Session
 
 from config.database import get_db
 from services.games import GamesService
-from schemas.games import GamesSchema, GamesCreateSchema, GamesUpdateSchema
+from schemas.games import GamesSchema, GamesCreateSchema, GamesUpdateSchema, \
+  GamesAssignToDeveloperSchema
 
 router = APIRouter(prefix='/games')
 
@@ -35,30 +36,24 @@ async def list_games(
 async def add_game(new_game: GamesCreateSchema, db: Session = Depends(get_db)):
   return GamesService(db).add_game(new_game).handle_result()
 
+@router.post('/developers', response_model=GamesAssignToDeveloperSchema)
+async def assign_to_developer(
+  payload: GamesAssignToDeveloperSchema,
+  db: Session = Depends(get_db)
+):
+  return GamesService(db).assign_developers(payload).handle_result()
+
 # PUT --------------------------------------------------------------------------
 
-@router.put('{game_id}', response_model=GamesSchema)
+@router.put('', response_model=GamesUpdateSchema)
 async def update_game(
-  game_id: int,
   updated_game: GamesUpdateSchema,
   db: Session = Depends(get_db)
 ):
-  params = {}
-  if updated_game.status:
-    params['status'] = updated_game.status
-  if updated_game.ownership:
-    params['ownership'] = updated_game.ownership
-  if updated_game.platform_id:
-    params['platform_id'] = updated_game.platform_id
-  if updated_game.finish_date:
-    params['finish_date'] = updated_game.finish_date
-  if updated_game.score:
-    params['score'] = updated_game.score
-
-  return GamesService(db).update_game(game_id, params).handle_result()
+  return GamesService(db).update_game(updated_game).handle_result()
 
 # DELETE -----------------------------------------------------------------------
 
-@router.delete('{game_id}', response_model=int)
-async def remove_game(game_id: int, db: Session = Depends(get_db)):
-  return GamesService(db).remove_game(game_id).handle_result()
+@router.delete('', response_model=dict)
+async def remove_game(id: str, db: Session = Depends(get_db)):
+  return GamesService(db).remove_game(int(id)).handle_result()

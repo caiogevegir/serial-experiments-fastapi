@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Date, Enum
+from sqlalchemy import Column, Integer, String, ForeignKey, Enum
 from sqlalchemy.orm import relationship
 
 from config.database import Base
@@ -43,29 +43,16 @@ class GamesModel(Base):
     nullable=False
   )
 
-  backlog_date = Column(
-    'backlog_date',
-    Date,
-    nullable=False
-  )
-
-  finish_date = Column(
-    'finish_date',
-    Date
-  )
-
   score = Column(
     'score',
     Integer
   )
 
   platform = relationship(
-    'PlatformsModel',
-    back_populates='games'
+    'PlatformsModel'
   )
 
   developers = relationship(
     'DevelopersModel',
-    secondary=games_by_developers,
-    back_populates='games'
+    secondary=games_by_developers
   )

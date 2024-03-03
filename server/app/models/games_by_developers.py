@@ -7,14 +7,18 @@ from config.database import Base
 games_by_developers = Table(
   'games_by_developers',
   Base.metadata,
+
   Column(
     'game_id',
     Integer,
-    ForeignKey('games.id', ondelete='CASCADE')
+    ForeignKey('games.id', ondelete='CASCADE'),
+    primary_key=True
   ),
+
   Column(
     'developer_id',
     Integer,
-    ForeignKey('developers.id', ondelete='CASCADE')
+    ForeignKey('developers.id', ondelete='CASCADE'),
+    primary_key=True
   )
 )
