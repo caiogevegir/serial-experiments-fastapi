@@ -1,7 +1,7 @@
 import os
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, Session
 from dotenv import load_dotenv
 
 # ------------------------------------------------------------------------------
@@ -21,6 +21,12 @@ SessionLocal = sessionmaker(
 )
 
 Base = declarative_base()
+
+# ------------------------------------------------------------------------------
+
+class DBSessionMixin:
+  def __init__(self, db: Session):
+    self.db = db
 
 # ------------------------------------------------------------------------------
 

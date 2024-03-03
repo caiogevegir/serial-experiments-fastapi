@@ -1,18 +1,9 @@
-from sqlalchemy.orm import Session
+from config.database import DBSessionMixin
 from errors.main import AppExceptionCase
 
 # ------------------------------------------------------------------------------
 
-class DBSessionMixin:
-  def __init__(self, db: Session):
-    self.db = db
-
-
 class AppService(DBSessionMixin):
-  pass
-
-
-class AppCRUD(DBSessionMixin):
   pass
 
 # ------------------------------------------------------------------------------

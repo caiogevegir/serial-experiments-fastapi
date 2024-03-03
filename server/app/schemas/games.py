@@ -10,7 +10,7 @@ class GamesBaseSchema(BaseModel):
   name: str
   status: GameStatus
   ownership: OwnershipStatus
-  score: int
+  score: int | None
 
 
 class GamesCreateSchema(GamesBaseSchema):
@@ -25,7 +25,7 @@ class GamesAssignToDeveloperSchema(BaseModel):
 class GamesUpdateSchema(BaseModel):
   id: int
   status: GameStatus
-  score: int
+  score: int | None
 
 
 class GamesSchema(GamesBaseSchema):
@@ -34,4 +34,4 @@ class GamesSchema(GamesBaseSchema):
   developers: list[DevelopersBaseSchema]
 
   class Config:
-    orm_mode = True
+    from_attributes = True

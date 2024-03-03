@@ -1,5 +1,6 @@
-from .main import AppService, AppCRUD, ServiceResult
-from models.developers import DevelopersModel
+from .main import AppService, ServiceResult
+
+from repositories.developers import DevelopersCRUD
 from schemas.developers import DevelopersCreateSchema
 from errors.developers import DevelopersException
 
@@ -21,27 +22,3 @@ class DevelopersService(AppService):
     if new_developer == None:
       return ServiceResult(DevelopersException.UnableToAddDevelopers())
     return ServiceResult(new_developer)
-    
-
-# ------------------------------------------------------------------------------
-
-class DevelopersCRUD(AppCRUD):
-
-  def list_developers(self) -> list[DevelopersModel] | None:
-    try:
-      return self.db.query(DevelopersModel).all()
-    except:
-      return None
-
-  def add_developer(
-    self,
-    developer: DevelopersCreateSchema
-  ) -> DevelopersModel | None:
-    try:
-      new_developer = DevelopersModel(**developer.model_dump())
-      self.db.add(new_developer)
-      self.db.commit()
-      self.db.refresh(new_developer)
-      return new_developer
-    except:
-      return None
