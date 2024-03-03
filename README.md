@@ -24,3 +24,8 @@ DATABASE_URL=sqlite+pysqlite:///./games_collection.db
 ## To Be Developed...
 
 - Unit/Integration tests
+
+## References
+
+[FastAPI with SQL Alchemy](https://fastapi.tiangolo.com/tutorial/sql-databases/#__tabbed_2_1)<br/>
+[FastAPI Services Abstraction](https://github.com/visini/abstracting-fastapi-services)
